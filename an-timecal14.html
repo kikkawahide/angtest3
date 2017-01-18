@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+    <script src="script_r.js"></script>
+
+    <script>
+//今日の日時を表示 
+
+
+var date = new Date();
+document.write(date.getFullYear()  + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "<br />\r\n");
+document.write("<br />\r\n");
+ </script>
+    <!--
+    <script type="text/javascript" src="calcPage.js"></script>  
+    <script type="text/javascript" src="caltime.js"></script>  
+    --> 
+<script>
+angular.module("App", [])
+.controller("AppCtrl", ['$scope', '$filter', function($scope, $filter) { 
+  $scope.sth0 =  new Date(2017, 1, 1, 8, 30, 0);
+   }])
+.controller("CalcController", ['$scope','SetCalcResult',function($scope,SetCalcResult) {
+
+  $scope.calcResult = function(number1,number2,ny,LBT,CTT,LST) {
+ 
+            return SetCalcResult.calc(number1,number2,ny,LBT,CTT,LST);
+        }
+   }])
+.service('SetCalcResult',[function() {
+        this.calc = function(num1,num2,ny) {
+          var r_mm;
+          sth = num1.getHours();
+          stm = num1.getMinutes();
+          edh = num2.getHours();
+          edm = num2.getMinutes();
+
+         // alert("num1=" + num1 + "num2=" + num2 + "ny=" + ny  );
+           console.log('entry sth : %d', sth);
+           console.log('stm : %d', stm);
+           console.log('edh : %d', edh);
+           console.log('edm : %d', edm);
+           //ny = "日勤" ;
+ //         if (ny == "日勤")  {  
+
+              r_ms = sth*60+stm ;
+              r_me = edh*60+edm ;
+              if ( r_ms < r_me ) {
+                  r_mm = ((edh + 0)*60 + edm )- (sth * 60 + stm );
+                    console.log('r_ms < r_me r_mm : %d', r_mm);
+              } else {
+                if (edh <=24 ) { 
+                  console.log('edh <=24 r_mm : %d', r_mm);
+                   if (edh < 8 ) {
+                      r_mm = ((edh + 24)*60 + edm )- (sth * 60 + stm );
+                   } else {
+                      r_mm = ((edh + 0)*60 + edm )- (sth * 60 + stm );
+                   };
+                    
+                } else {  
+                    r_mm = ((edh + 0)*60 + edm )- (sth * 60 + stm );
+                    console.log('edh <=24 else r_mm : %d', r_mm);
+                };
+            };
+
+             if ( sth <= 12 && edh >= 13 ) {
+                console.log('sth <= 12 && edh >= 13  r_mm : %d', r_mm);
+                r_mm = r_mm -60 ;
+                console.log('sth <= 12 && edh >= 13  r_mm : %d', r_mm);
+             } ;
+
+             if ( sth <= 24 && edh >= 1 ) {
+                if ( sth > edh ) {
+                  r_mm = r_mm -60 ;
+                  console.log('sth <= 24 && edh >= 1  r_mm : %d', r_mm);
+                };
+             };
+
+ 
+           
+            console.log('  r_mm ret: %d', r_mm);
+            return r_mm;
+
+        };
+        
+
+
+
+    }]);
+
+</script>
+
+
+<style type="text/css">
+
+input.example1, select {
+width: 300px;
+}
+textarea {
+width: 400px;
+height: 20em;
+}
+
+input, select, textarea {
+background-color: #EAEEEF;
+}
+option.example2 {
+background-color: #ffffff;
+}
+
+</style>
+
+<title>calSample</title> 
+</head>
+<body ng-app="App">
+<CENTER>
+<br/>
+		<div class="jumbotron">
+			   <h2> 時間ーTIME</h2>
+		</div>
+<br/>
+<br/>
+<!-- <div ng-controller="ServiceCtrl">  ng-init="name='<?- param ?>'"  -->
+<div ng-app="App" ng-controller="AppCtrl">
+
+   
+</div>
+
+<div ng-controller="CalcController">
+
+<input type="button" value=" TIMEー時間" onClick="location.href='http://tcs-o.co.jp/TESTY/an-timecal14b.html'">
+<br/>
+<pre ng-non-bindable><code></code></pre>   
+<!--
+<input type="radio" ng-model="ny" value="日勤" checked="checked" > 日勤 <br/>
+<input type="radio" ng-model="ny" value="夜勤"> 夜勤 <br/>
+-->
+ <pre ng-non-bindable><code></code></pre>   
+<div ng-cloak> 
+開始<input id="date1" type="time" ng-model="sth1" step="900">   
+終了<input id="date2"   type="time" ng-model="edh1" step="900"> 
+<br/>
+LB.T  <input id="date3"  type="number"  ng-model="LBT1" step="10" size="100" style="width:80px;"> 
+ロス.T　　<input id="date3"  type="number" ng-model="LST1" step="10" size="100" style="width:80px;"> 
+<br/>
+<FONT size="4"　color="#000080">
+CT.T　
+<br/>
+[{{calcResult(sth1,edh1,ny)-LBT1-LST1}}]  
+</FONT>
+<br/>
+<br/>
+</div>
+</div>
+
+
+
+<p><font size="5"></p>
+<a href="http://tcs-o.co.jp/TESTY/an-top.html">TOPへ戻る</a>
+ </CENTER>
+
+</body>
+</html>
