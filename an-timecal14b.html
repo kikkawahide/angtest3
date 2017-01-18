@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+    <script src="script_r.js"></script>
+    <!--
+    <script type="text/javascript" src="calcPage.js"></script>  
+    <script type="text/javascript" src="caltime.js"></script>  
+    --> 
+<script>
+//今日の日時を表示 
+
+
+var date = new Date();
+document.write(date.getFullYear()  + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "<br />\r\n");
+document.write("<br />\r\n");
+ </script>
+<script>
+angular.module("App", [])
+.controller("AppCtrl", ['$scope', '$filter', function($scope, $filter) { 
+  $scope.sth0 =  new Date(2017, 1, 1, 8, 30, 0);
+   }])
+.controller("CalcController", ['$scope','SetCalcResult',function($scope,SetCalcResult) {
+
+  $scope.calcResult2 = function(number1,number2,ny,LBT,CTT,LST) {
+    
+
+            return SetCalcResult.calc(number1,number2,ny,LBT,CTT,LST);
+        }
+   }])
+ 
+.service('SetCalcResult',[function() {
+        this.calc = function(num1,num2,ny,LBT,CTT,LST) {
+          // alert("num1=" + num1 + "num2=" + num2 + "ny=" + ny  );
+          var LBTx=parseInt(LBT);
+          var CTTx=parseInt(CTT);
+          var LSTx=parseInt(LST);
+          var  sth = num1.getHours();
+          var  stm = num1.getMinutes();
+        //  edh = num2.getHours();
+        //  edm = num2.getMinutes();
+         
+        
+              var r_ms = sth*60+stm ;
+              
+              //r_me = edh*60+edm ;
+              var r_mm = r_ms+LBTx+CTTx+LSTx ;
+              // alert("r_ms=" + r_ms  );    
+        
+              var r_m1 = Math.floor(r_mm /60 );  
+              // alert("r_ms=" + r_ms  );    
+              var r_m2 = r_mm -(r_m1 * 60) ; 
+              var r_mx = w1(r_m1) + ":" + w1(r_m2); 
+              // 休憩時間６０分
+              if (sth < 12 && r_m1 >= 12 ) {
+                  r_mx = w1(r_m1+1)  + ":" + w1(r_m2);  
+              };
+ 
+              if (sth < 24 && r_m1 >= 24 ) {
+                  r_mx = w1(r_m1+1-24)  + ":" + w1(r_m2);  
+              };
+
+  
+            return r_mx;
+
+        };
+
+        this.calc2 = function(work) {
+        }
+
+             var w1 = function(work_d) {
+             console.log("work_d = %d", work_d );
+                var ww;    
+                if (work_d  < 10) {
+                     ww = "0" + work_d ;
+
+                  }else {
+                     ww= work_d ; 
+                  }
+                
+                  console.log("ww= %s",ww );
+                  return ww ; 
+          };
+
+    }]);
+
+</script>
+
+
+<style type="text/css">
+
+input.example1, select {
+width: 300px;
+}
+textarea {
+width: 400px;
+height: 20em;
+}
+
+input, select, textarea {
+background-color: #EAEEEF;
+}
+option.example2 {
+background-color: #ffffff;
+}
+
+</style>
+
+<title>calSample</title> 
+</head>
+<body ng-app="App">
+<CENTER>
+<br/>
+		<div class="jumbotron">
+			   <h2> TIMEー時間</h2>
+		</div>
+<br/>
+<br/>
+<!-- <div ng-controller="ServiceCtrl">  ng-init="name='<?- param ?>'"  -->
+<div ng-app="App" ng-controller="AppCtrl">
+
+   
+</div>
+
+<div ng-controller="CalcController">
+<input type="button" value=" 時間ーTIME" onClick="location.href='http://tcs-o.co.p/TESTY/an-timecal14.html'">
+<br/>
+<br/>
+<br/>
+ <pre ng-non-bindable><code></code></pre> 
+
+開始<input id="date1" type="time" ng-model="sth0" step="900" >   
+ <pre ng-non-bindable><code></code></pre>   
+<div ng-cloak> 
+<FONT size="4"　color="#000080">
+開始[{{ sth0 | date: 'HH:mm' }}]  
+終了[{{calcResult2(sth0,edh2,ny,LBT1,CTT1,LST1)}}]
+</FONT>
+<FONT size="2"　color="black">
+<br/>
+LB.T　　<br/>
+<input id="date3" type="number"  ng-model="LBT1" step="10" size="100" style="width:80px;" >
+<br/> 
+CT.T　　<br/>
+<input id="date3" type="number" ng-model="CTT1" step="10" size="100" style="width:80px;"> 
+<br/>
+ロス.T　<br/>
+<input id="date5" type="number" ng-model="LST1" step="10" size="100" style="width:80px;" > 
+</FONT> 
+
+</div>
+
+
+
+<!--{{calcResult(sth1,edh1,ny)}} 
+-->
+ 
+</div>　 <!-- <div ng-controller="CalcController"> -->
+<p><font size="5"></p>
+<a href="http://tcs-o.co.jp/TESTY/an-top.html">TOPへ戻る</a>
+ </CENTER>
+
+ <script>
+  // Define utility functions
+  //  <p><font size="6">時間ST( : ) |  時間ED( : )　| 　LBT  　| 　 CT.T 　| 　ロスタイム <p>   
+  //  <input type="button" value="change value" onclick="work_mm(times_sth,time_stm,times_edh,times_edm)" />
+  // LOS:<input id="date6" type="number" style="width:50px;" ng-model="x" value="00"> 
+  // LOS:<input id="date6" type="number" style="width:50px;" ng-model="y" value="00"> 
+   //{{calcResult(number1,number2)}}   
+/*
+<script>
+  x = 10;
+  x = x + 1;
+  alert("x="+x);
+  if (x=11 ){ x=200} else {x=100}
+    alert("x ="+x)
+
+
+*/
+// CT.T<input id="date4"  size="100" style="width:80px;  type="text" ng-model="CTT1" ng-init="CTT1 = '20'" >  -->
+
+</script>
+
+
+</body>
+</html>
